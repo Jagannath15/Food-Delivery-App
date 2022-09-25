@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
   int currentindex=0;
 
   final Screens=[
-    Home(),
+    Homepage(),
     ViewOrders(),
     CartPage(),
     SettingPage()
@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
     backgroundColor: Color(0xfff6f5f8),
   
-      body: Homepage(),
+      body: Screens[currentindex],
       
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Color(0xfff6f5f8),

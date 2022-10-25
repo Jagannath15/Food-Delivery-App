@@ -1,7 +1,6 @@
 
-import 'dart:collection';
-import 'dart:ffi';
-
+import 'package:food_delivery_app/Screens/details.dart';
+import 'package:food_delivery_app/models/recommended.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,9 @@ import 'package:food_delivery_app/Screens/setting.dart';
 import 'package:food_delivery_app/Screens/view_orders.dart';
 import 'package:food_delivery_app/Widgets/recommended_items.dart';
 import 'package:food_delivery_app/Widgets/topcategories.dart';
+import 'package:food_delivery_app/main.dart';
+import 'package:food_delivery_app/models/recommended.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
@@ -66,9 +68,11 @@ class Homepage extends StatefulWidget {
   State<Homepage> createState() => _HomepageState();
 }
 class _HomepageState extends State<Homepage> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: SafeArea(
            child: SingleChildScrollView(child: Column(
             children: [
@@ -186,19 +190,46 @@ class _HomepageState extends State<Homepage> {
              Container(
            height: 200,
             margin: EdgeInsets.all(5),
-             child: ListView(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true, 
-              children: [
-             Recommended("assets/burger2.png", "Burger", "54145"),
-             Recommended("assets/burger2.png", "Burger", "54145"),
-             Recommended("assets/burger2.png", "Burger", "54145"),
-             Recommended("assets/burger2.png", "Burger", "54145"),
-             Recommended("assets/burger2.png", "Burger", "54145"),
-             Recommended("assets/burger2.png", "Burger", "54145"),
-             Recommended("assets/burger2.png", "Burger", "54145"),
-             Recommended("assets/burger2.png", "Burger", "54145"),
-            ],
+             child: InkWell(
+               child: ListView.builder(
+                itemCount: RecommendedList.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder:(context, index) {
+                  Recommend recommend=RecommendedList[index];
+                 return  Container(
+                    height:190 ,
+                    width: 160,
+                    margin: EdgeInsets.only(left: 8),
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(25)
+                    ),
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(reco: recommend,)));
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 150,
+                            width: 170,
+                            color: Colors.transparent,
+                            child: Image.network(recommend.imageurl.toString()),
+                          ),
+                          SizedBox(height: 10,),
+                          Row(
+                            children: [
+                              Text(recommend.name.toString()),
+                              Flexible(fit: FlexFit.tight, child: SizedBox()),
+                              Text(recommend.price.toString())
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+               }, ),
              ),
            ),
             ],

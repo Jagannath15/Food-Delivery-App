@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home:/*login==false? Home(): StartPage()*/ Home()
+      home:login==false? Home(): StartPage(),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -5,10 +6,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:food_delivery_app/models/recommended.dart';
 
 class DetailPage extends StatelessWidget {
-  final Recommend reco;
-
+  final DocumentSnapshot documentSnapshot;
+   
    DetailPage({Key? key,
-   required this.reco}) : super(key: key);
+   required this.documentSnapshot}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class DetailPage extends StatelessWidget {
          
           Container(
             height: 320,
-            child: Image(image: NetworkImage(reco.imageurl.toString())),
+            child: Image(image: NetworkImage(documentSnapshot['imageUrl'])),
           ),
           Expanded(child: Container(
               decoration: BoxDecoration(
@@ -35,7 +36,7 @@ class DetailPage extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(reco.name.toString(),style: TextStyle(color: Colors.white,fontSize: 27,fontWeight: FontWeight.bold),),
+                    Text(documentSnapshot['name'],style: TextStyle(color: Colors.white,fontSize: 27,fontWeight: FontWeight.bold),),
                     Flexible(fit: FlexFit.tight, child: SizedBox()),
                     Icon(Icons.alarm,color: Colors.white,),
                     Text(" 10-15mins",style: TextStyle(color: Colors.white54 ),)  
@@ -43,7 +44,7 @@ class DetailPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Text(reco.price.toString(),style: TextStyle(color: Colors.white,fontSize: 23,fontWeight: FontWeight.w500),),
+                    Text(documentSnapshot['Price'],style: TextStyle(color: Colors.white,fontSize: 23,fontWeight: FontWeight.w500),),
                     Flexible(fit: FlexFit.tight, child: SizedBox()),
                     Container(
                       height: 60,

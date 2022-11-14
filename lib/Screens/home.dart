@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:food_delivery_app/Screens/details.dart';
 import 'package:food_delivery_app/models/recommended.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -68,7 +69,11 @@ class Homepage extends StatefulWidget {
   State<Homepage> createState() => _HomepageState();
 }
 class _HomepageState extends State<Homepage> {
-  
+    final CollectionReference _products =
+      FirebaseFirestore.instance.collection('foods');
+
+      final CollectionReference _specials =
+      FirebaseFirestore.instance.collection('specials');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -169,9 +174,9 @@ class _HomepageState extends State<Homepage> {
               ],
              ),
            ),
-           SizedBox(height: 15,),
+   
             Container(
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.only(left: 10,right: 10),
               child: Row(
                 children: [
                   Text("Recommended for You",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
@@ -186,54 +191,133 @@ class _HomepageState extends State<Homepage> {
                 ],
               ),
             ),
-            SizedBox(height: 10,),
-             Container(
-           height: 200,
-            margin: EdgeInsets.all(5),
-             child: InkWell(
-               child: ListView.builder(
-                itemCount: RecommendedList.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder:(context, index) {
-                  Recommend recommend=RecommendedList[index];
-                 return  Container(
-                    height:190 ,
-                    width: 160,
-                    margin: EdgeInsets.only(left: 8),
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(25)
-                    ),
-                    child: InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(reco: recommend,)));
-                      },
+                  
+          Container(
+            height: 200,
+            
+            child: StreamBuilder(
+              stream: _products.snapshots(),
+              builder:  (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
+                if (streamSnapshot.hasData) {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: streamSnapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                    final DocumentSnapshot documentSnapshot =
+                      streamSnapshot.data!.docs[index];
+                  return InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(documentSnapshot: documentSnapshot)));
+                    },
+                    child: Container(
+                      height: 190,
+                      width: 160,
+                      margin: EdgeInsets.all(10),
                       child: Column(
                         children: [
                           Container(
-                            height: 150,
-                            width: 170,
-                            color: Colors.transparent,
-                            child: Image.network(recommend.imageurl.toString()),
-                          ),
-                          SizedBox(height: 10,),
-                          Row(
-                            children: [
-                              Text(recommend.name.toString()),
-                              Flexible(fit: FlexFit.tight, child: SizedBox()),
-                              Text(recommend.price.toString())
-                            ],
-                          )
+                              height: 150,
+                              width: 170,
+                              color: Colors.transparent,
+                              child: Image.network(documentSnapshot['imageUrl']),
+                            ),
+                            SizedBox(height: 10,),
+                            Row(
+                              children: [
+                                Text(documentSnapshot['name']),
+                                Flexible(fit: FlexFit.tight, child: SizedBox()),
+                                Text(documentSnapshot['Price'])
                         ],
                       ),
+                        ]
+                    ),
                     ),
                   );
-               }, ),
-             ),
-           ),
+
+                  },
+                  );
+                }
+              return CircularProgressIndicator();
+            }),
+          ),
+
+        SizedBox(height: 5,),
+
+          Container(
+              margin: EdgeInsets.only(left: 10,right: 10),
+              child: Row(
+                children: [
+                  Text("Eat & Greet specials",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                  Flexible(fit: FlexFit.tight, child: SizedBox()),
+                  InkWell(
+                    child: Row(
+                      children: [
+                        Text("View all",style: TextStyle(fontSize: 13,color: Color(0xff969696)),),
+                        Icon(Icons.arrow_forward,size: 18,color: Color(0xff969696),)
+                      ],
+                    )                  ),  
+                ],
+              ),
+          ),
+
+
+
+          Container(
+            height: 200,
+            
+            child: StreamBuilder(
+              stream: _specials.snapshots(),
+              builder:  (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
+                if (streamSnapshot.hasData) {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: streamSnapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                    final DocumentSnapshot documentSnapshot =
+                      streamSnapshot.data!.docs[index];
+                  return InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(documentSnapshot: documentSnapshot)));
+                    },
+                    child: Container(
+                      height: 190,
+                      width: 160,
+                      margin: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 150,
+                              width: 170,
+                              color: Colors.transparent,
+                              child: Image.network(documentSnapshot['imageUrl']),
+                            ),
+                            SizedBox(height: 10,),
+                            Wrap(
+                              children:[Row(
+                                children: [
+                                  Text(documentSnapshot['name'],textDirection: TextDirection.ltr),
+                                  Flexible(fit: FlexFit.tight, child: SizedBox()),
+                                  Text(documentSnapshot['Price'])
+                                                    ],
+                                                  ),]
+                            ),
+                        ]
+                    ),
+                    ),
+                  );
+
+                  },
+                  );
+                }
+              return CircularProgressIndicator();
+            }),
+          ),
             ],
-                 ),),                
+                 ),
+                 ),      
+               
          ), 
     );
   }

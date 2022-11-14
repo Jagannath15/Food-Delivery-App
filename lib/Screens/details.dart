@@ -1,16 +1,19 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:food_delivery_app/models/recommended.dart';
+import 'package:get/get.dart';
+
+import '../Controllers/detail_page_controller.dart';
+
 
 class DetailPage extends StatelessWidget {
   final DocumentSnapshot documentSnapshot;
-   
    DetailPage({Key? key,
    required this.documentSnapshot}) : super(key: key);
-
+ final DetailController c=Get.put(DetailController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,11 +47,33 @@ class DetailPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Text(documentSnapshot['Price'],style: TextStyle(color: Colors.white,fontSize: 23,fontWeight: FontWeight.w500),),
+                   Container(
+                      height: 45,
+                      width: 123, 
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white54,
+
+                      ),
+                      child: Row(
+                        mainAxisAlignment:MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(onPressed: (){
+                            c.decrement();
+                          }, icon: Icon(Icons.remove,size: 25,)),
+                        //  SizedBox(width: 5,),
+                          Obx(()=>Text("${c.quantity.toString()}", style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold) ,)),
+                         // SizedBox(width: 5,),
+                          IconButton(onPressed: (){
+                             c.increment();}, icon: Icon(Icons.add,size: 25,))
+                        ],
+                      ),
+                   ),
+                   // Text(documentSnapshot['Price'],style: TextStyle(color: Colors.white,fontSize: 23,fontWeight: FontWeight.w500),),
                     Flexible(fit: FlexFit.tight, child: SizedBox()),
                     Container(
-                      height: 60,
-                      width: 230,
+                      height: 55,
+                      width: 190,
                       decoration: BoxDecoration(
                         color: Color(0xffccff01),
                         borderRadius: BorderRadius.circular(15)

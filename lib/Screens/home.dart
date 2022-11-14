@@ -1,7 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:food_delivery_app/Screens/details.dart';
-import 'package:food_delivery_app/models/recommended.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ import 'package:food_delivery_app/Screens/view_orders.dart';
 import 'package:food_delivery_app/Widgets/recommended_items.dart';
 import 'package:food_delivery_app/Widgets/topcategories.dart';
 import 'package:food_delivery_app/main.dart';
-import 'package:food_delivery_app/models/recommended.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

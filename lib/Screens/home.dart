@@ -8,7 +8,6 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:food_delivery_app/Screens/cart.dart';
 import 'package:food_delivery_app/Screens/setting.dart';
-import 'package:food_delivery_app/Screens/view_orders.dart';
 import 'package:food_delivery_app/Widgets/recommended_items.dart';
 import 'package:food_delivery_app/Widgets/topcategories.dart';
 import 'package:food_delivery_app/main.dart';
@@ -28,7 +27,6 @@ class _HomeState extends State<Home> {
 
   final Screens=[
     Homepage(),
-    ViewOrders(),
     CartPage(),
     SettingPage()
   ];
@@ -42,14 +40,13 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Color(0xfff6f5f8),
         color: Color(0xff1f1f1f),
-        height: 46,
+        height: 48,
         index: currentindex,
         onTap: (index)=>setState(() {
           currentindex=index;
         }),
         items: [
           Icon(Icons.home,color: Colors.white,),
-          Icon(Icons.remove_red_eye,color: Colors.white),
           Icon(Icons.shopping_cart_checkout,color: Colors.white),
           Icon(Icons.settings,color: Colors.white),
         ]

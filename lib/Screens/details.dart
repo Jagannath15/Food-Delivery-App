@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -15,6 +16,22 @@ class DetailPage extends StatelessWidget {
    required this.documentSnapshot}) : super(key: key);
  final DetailController c=Get.put(DetailController());
   @override
+
+  addtocart() async{
+    FirebaseAuth _auth=FirebaseAuth.instance;
+    var curremtuser=_auth.currentUser;
+    CollectionReference collectionReference=FirebaseFirestore.instance.collection("add_to_cart");
+     return collectionReference.doc(curremtuser!.phoneNumber).collection("items").doc(documentSnapshot['name']).set({
+      "name":documentSnapshot['name'],
+      "price":documentSnapshot['Price'],
+       "quantity":c.quantity.toString(),
+       "img":documentSnapshot['imageUrl']
+
+    });
+  print("added");
+  }
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -71,23 +88,28 @@ class DetailPage extends StatelessWidget {
                    ),
                    // Text(documentSnapshot['Price'],style: TextStyle(color: Colors.white,fontSize: 23,fontWeight: FontWeight.w500),),
                     Flexible(fit: FlexFit.tight, child: SizedBox()),
-                    Container(
-                      height: 55,
-                      width: 190,
-                      decoration: BoxDecoration(
-                        color: Color(0xffccff01),
-                        borderRadius: BorderRadius.circular(15)
-                      ),
-                     
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                              Icon(Icons.shopping_cart,size: 30,),
-                              SizedBox(width: 10,),
-                              Text("Add to cart",style: TextStyle(fontSize: 18),)
-                          ],
+                    InkWell(
+                      onTap: (){
+                        addtocart();
+                      },
+                      child: Container(
+                        height: 55,
+                        width: 190,
+                        decoration: BoxDecoration(
+                          color: Color(0xffccff01),
+                          borderRadius: BorderRadius.circular(15)
                         ),
-                     
+                       
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                                Icon(Icons.shopping_cart,size: 30,),
+                                SizedBox(width: 10,),
+                                Text("Add to cart",style: TextStyle(fontSize: 18),)
+                            ],
+                          ),
+                       
+                      ),
                     )
                   ],
                 )

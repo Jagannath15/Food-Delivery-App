@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:food_delivery_app/Screens/home.dart';
+import 'package:get/get.dart';
 
 class CartPage extends StatelessWidget {
    CartPage({Key? key}) : super(key: key);
@@ -11,6 +13,14 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(onPressed: (){
+          Get.to(Home());
+        }, icon: Icon(Icons.arrow_back_rounded,size: 30,color: Colors.black54,)),
+        elevation: 0,
+        title: Text("Checkout",style: TextStyle(color: Colors.black),),
+        backgroundColor: Colors.white,
+      ),
       body: SingleChildScrollView(
         child: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items").snapshots(),
@@ -24,12 +34,13 @@ class CartPage extends StatelessWidget {
                 DocumentSnapshot _doc=streamSnapshot.data!.docs[index];
                
                 return Container(
+                  padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: Color(0xffd7d8da),
                     borderRadius: BorderRadius.all(Radius.circular(15)), 
                                       ),
                   margin: EdgeInsets.only(top: 10,left: 10,right: 10),
-                  height: 100,
+                  height: 80,
                   width: MediaQuery.of(context).size.width,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -45,11 +56,11 @@ class CartPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(_doc['name'],style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),),
-                          Text("Quantity: "+_doc['quantity'],style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,)), 
+                          Text("Quantity: "+_doc['quantity'],style: TextStyle(fontSize: 15,fontWeight: FontWeight.w300,)), 
                         ],
                       ),
                       SizedBox(width: 10,),
-                      Text("₹"+_doc['price'],style: TextStyle(fontSize: 23,fontWeight: FontWeight.bold,color: Colors.green), ),
+                      Text("₹"+_doc['price'],style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.green), ),
                       IconButton(onPressed: (){
                         FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items").doc(_doc['name']).delete();
                       }, icon: Icon(Icons.remove_shopping_cart),splashColor: Colors.amber,)
@@ -64,6 +75,27 @@ class CartPage extends StatelessWidget {
             color: Colors.black54,
           );
         }
+        ),
+      ),
+      bottomNavigationBar: GestureDetector(
+        onTap: (){},
+        child: Container(
+          margin: EdgeInsets.all(8),
+          height: 55,
+          width: MediaQuery.of(context).size.width,
+        
+          decoration: BoxDecoration(
+            color: Color(0xffccff01),
+            borderRadius: BorderRadius.all(Radius.circular(15))
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.shopping_cart_checkout),
+              SizedBox(width: 2,),
+              Text("Proceed to checkout",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
+            ],
+          ),
         ),
       ),
     );

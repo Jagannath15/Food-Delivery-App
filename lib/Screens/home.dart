@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_delivery_app/Screens/details.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -69,6 +70,10 @@ class _HomepageState extends State<Homepage> {
 
       final CollectionReference _specials =
       FirebaseFirestore.instance.collection('specials');
+
+    
+
+      final CollectionReference _noofitems=FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,23 +97,40 @@ class _HomepageState extends State<Homepage> {
                         margin: EdgeInsets.all(10),
                         child: Text("Eat and Greet",style: TextStyle(color: Colors.white,fontSize: 25, fontWeight: FontWeight.bold))),   
                         Flexible(fit: FlexFit.tight, child: SizedBox()),
-                      Container(
-                        height: 30,
-                        width: 60,             
-                        margin: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Color(0xffccff01),
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                          child: Center(
-                            child: Row(
-                              children: [
-                              SizedBox(width: 11,),
-                              Icon(Icons.shopify_rounded,),
-                              SizedBox(width: 2,),
-                              Text("1")
-                            ],),
+                      InkWell(
+                        onTap: () => Get.to(CartPage()),
+                        child: Container(
+                          height: 30,
+                          width: 60,             
+                          margin: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Color(0xffccff01),
+                            borderRadius: BorderRadius.circular(9),
                           ),
+                            child: Center(
+                              child: StreamBuilder(
+                                 stream: FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items").snapshots(),
+                                builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                                  if(streamSnapshot.hasData){
+                                    return Row(
+                                children: [
+                                SizedBox(width: 11,),
+                                Icon(Icons.shopify_rounded,),
+                                SizedBox(width: 2,),
+                                Text(streamSnapshot.data!.docs.length.toString())
+                              ],);
+                                  }
+                                  return Row(
+                                children: [
+                                SizedBox(width: 11,),
+                                Icon(Icons.shopify_rounded,),
+                                SizedBox(width: 2,),
+                                Text("0")
+                              ],);
+                                },)
+                      
+                            ),
+                        ),
                       ),
                     ],
                   ), 
@@ -233,7 +255,7 @@ class _HomepageState extends State<Homepage> {
                   },
                   );
                 }
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             }),
           ),
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:food_delivery_app/Screens/home.dart';
+import 'package:food_delivery_app/Screens/payment.dart';
 import 'package:get/get.dart';
 
 class CartPage extends StatelessWidget {
@@ -78,7 +79,9 @@ class CartPage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: GestureDetector(
-        onTap: (){},
+        onTap: (){
+          Get.to(Billing());
+        },
         child: Container(
           margin: EdgeInsets.all(8),
           height: 55,

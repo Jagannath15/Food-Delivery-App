@@ -6,12 +6,14 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:food_delivery_app/Screens/home.dart';
 import 'package:food_delivery_app/Screens/payment.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class CartPage extends StatelessWidget {
    CartPage({Key? key}) : super(key: key);
   
   
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +35,14 @@ class CartPage extends StatelessWidget {
               
               itemBuilder: (_,index){
                 DocumentSnapshot _doc=streamSnapshot.data!.docs[index];
-               
+                int Fprice=int.parse(_doc['price']);
+                int Fquantity=int.parse(_doc['quantity']);
+                var intialtotal=Fprice*Fquantity;
+                String total=intialtotal.toString();
+
+                
+
+
                 return Container(
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
@@ -61,10 +70,11 @@ class CartPage extends StatelessWidget {
                         ],
                       ),
                       SizedBox(width: 10,),
-                      Text("₹"+_doc['price'],style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.green), ),
+                      Text("₹"+total,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.green), ),
                       IconButton(onPressed: (){
                         FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items").doc(_doc['name']).delete();
-                      }, icon: Icon(Icons.remove_shopping_cart),splashColor: Colors.amber,)
+                      }, icon: Icon(Icons.remove_shopping_cart),splashColor: Colors.amber,),
+
                     ],
                   )
                 );
@@ -96,7 +106,7 @@ class CartPage extends StatelessWidget {
             children: [
               Icon(Icons.shopping_cart_checkout),
               SizedBox(width: 2,),
-              Text("Proceed to checkout",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
+              Text("proceed",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
             ],
           ),
         ),

@@ -1,14 +1,18 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:food_delivery_app/Screens/cart.dart';
 import 'package:get/get.dart';
 import '../Controllers/billing_page_controller.dart';
 import '../Controllers/payement_type_controller.dart';
 
 class Billing extends StatelessWidget {
-  Billing({Key? key}) : super(key: key);
+  final total;
+  
+  Billing({Key? key, required this.total}) : super(key: key);
 
   final Billingcontroller b = Get.put(Billingcontroller());
   final payemnt_type pt=Get.put(payemnt_type());
@@ -24,12 +28,6 @@ class Billing extends StatelessWidget {
     TextEditingController city = TextEditingController();
     TextEditingController pincode = TextEditingController();
 
-    List payemnt_type = [
-      "Cash on Delivery",
-      "Google Pay",
-      "Phone Pe/Patym",
-      "Debit/Credit Card"
-    ];
 
     List<Step> steps() {
       return [
@@ -71,6 +69,7 @@ class Billing extends StatelessWidget {
                 ? StepState.complete
                 : StepState.indexed),
         Step(
+            
             title: Text("Address"),
             content: Column(
               children: [
@@ -145,19 +144,20 @@ class Billing extends StatelessWidget {
                 ? StepState.complete
                 : StepState.indexed),
         Step(
-          title: Text("payemnt"),
+          title: Text("Payemnt"),
           content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+              Text("Amount to be paid ₹"+total),
+                 Row(
                 children: [
                   Obx(
                     ()=>Radio(
                         value: "Cash on delivery",
                         groupValue: pt.payemnttype.value,
                         onChanged: (value) {pt.onchange(value);},
-                        activeColor: Colors.amber,
-                        fillColor: MaterialStateProperty.all(Colors.amber),
+                        activeColor: Colors.black,
+                        fillColor: MaterialStateProperty.all(Colors.black),
                         ),
                   ),
                   Text("Cash on Delivery"),
@@ -179,8 +179,8 @@ class Billing extends StatelessWidget {
                         value: "Google Pay",
                         groupValue:pt.payemnttype.value,
                         onChanged: (value) {pt.onchange(value);},
-                        activeColor: Colors.amber,
-                        fillColor: MaterialStateProperty.all(Colors.amber),
+                        activeColor: Colors.black,
+                        fillColor: MaterialStateProperty.all(Colors.black),
                         ),
                   ),
                   Text("Google Pay"),
@@ -202,8 +202,8 @@ class Billing extends StatelessWidget {
                         value: "Phone Pe/ Patym",
                         groupValue: pt.payemnttype.value,
                         onChanged: (value) {pt.onchange(value);},
-                        activeColor: Colors.amber,
-                        fillColor: MaterialStateProperty.all(Colors.amber),
+                        activeColor: Colors.black,
+                        fillColor: MaterialStateProperty.all(Colors.black),
                         ),
                   ),
                   Text("PhonePe/Patym"),
@@ -226,8 +226,8 @@ class Billing extends StatelessWidget {
                         value: "Credit / Debit card",
                         groupValue: pt.payemnttype.value,
                         onChanged: (value) {pt.onchange(value);},
-                        activeColor: Colors.amber,
-                        fillColor: MaterialStateProperty.all(Colors.amber),
+                        activeColor: Colors.black,
+                        fillColor: MaterialStateProperty.all(Colors.black),
                         ),
                   ),
                   Text("Credit/Debit card"),
@@ -252,53 +252,67 @@ class Billing extends StatelessWidget {
 
 
     return Scaffold(
-      body: SingleChildScrollView(
-          child: Obx(() => Stepper(
-              type: StepperType.vertical,
-              
-              currentStep: b.currentStep.value,
-              steps: steps(),
-              onStepContinue: () {
-                if (b.currentStep.value == 2) {
-                  Get.snackbar("Succes", "suceess");
-                } else {
-                  b.currentStep.value++;
-                }
-              },
-              physics: BouncingScrollPhysics(),
-              onStepCancel: () {
-                b.currentStep.value == 0 ? null : b.currentStep.value--;
-              },
-              onStepTapped: (index) {
-                b.currentStep.value = index;
-              },
-              controlsBuilder:
-                  (BuildContext context, ControlsDetails controls) {
-                return Container(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          child: Text(b.currentStep.value == steps().length - 1
-                              ? "Submit"
-                              : "Next"),
-                          onPressed: controls.onStepContinue,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      if (b.currentStep.value != 0)
+     
+      appBar: AppBar(
+        title: Text("Confirm Order",style: TextStyle(color: Colors.black),),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(onPressed: (){()=>Get.to(CartPage());}, icon: Icon(Icons.arrow_back,color: Colors.black,)),
+      ),
+      body: Theme(
+        data: ThemeData(
+          colorScheme: Theme.of(context).colorScheme.copyWith(
+                primary: Colors.black,
+              ), ),
+        child: SingleChildScrollView(
+            child: Obx(() => Stepper(
+                
+                type: StepperType.vertical,
+                
+                currentStep: b.currentStep.value,
+                steps: steps(),
+                onStepContinue: () {
+                  if (b.currentStep.value == 2) {
+                    Get.snackbar("Succes", "suceess");
+                  } else {
+                    b.currentStep.value++;
+                  }
+                },
+                physics: BouncingScrollPhysics(),
+                onStepCancel: () {
+                  b.currentStep.value == 0 ? null : b.currentStep.value--;
+                },
+                onStepTapped: (index) {
+                  b.currentStep.value = index;
+                },
+                controlsBuilder:
+                    (BuildContext context, ControlsDetails controls) {
+                  return Container(
+                    child: Row(
+                      children: [
                         Expanded(
                           child: ElevatedButton(
-                            child: const Text("Previous"),
-                            onPressed: controls.onStepCancel,
+                            child: Text(b.currentStep.value == steps().length - 1
+                                ? "Submit"
+                                : "Next"),
+                            onPressed: controls.onStepContinue,
                           ),
                         ),
-                    ],
-                  ),
-                );
-              }))),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        if (b.currentStep.value != 0)
+                          Expanded(
+                            child: ElevatedButton(
+                              child: const Text("Previous"),
+                              onPressed: controls.onStepCancel,
+                            ),
+                          ),
+                      ],
+                    ),
+                  );
+                }))),
+      ),
     );
   }
 }

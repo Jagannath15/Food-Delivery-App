@@ -10,11 +10,13 @@ import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class CartPage extends StatelessWidget {
    CartPage({Key? key}) : super(key: key);
+
   
   
   @override
-
+var mainpay=0;
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: (){
@@ -41,7 +43,7 @@ class CartPage extends StatelessWidget {
                 String total=intialtotal.toString();
 
                 
-
+              
 
                 return Container(
                   padding: EdgeInsets.all(5),
@@ -71,7 +73,7 @@ class CartPage extends StatelessWidget {
                       ),
                       SizedBox(width: 10,),
                       Text("₹"+total,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.green), ),
-                      IconButton(onPressed: (){
+                      IconButton(onPressed: (){ 
                         FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items").doc(_doc['name']).delete();
                       }, icon: Icon(Icons.remove_shopping_cart),splashColor: Colors.amber,),
 
@@ -88,29 +90,48 @@ class CartPage extends StatelessWidget {
         }
         ),
       ),
-      bottomNavigationBar: GestureDetector(
-        onTap: (){
-          Get.to(Billing());
-        },
-        child: Container(
-          margin: EdgeInsets.all(8),
-          height: 55,
-          width: MediaQuery.of(context).size.width,
-        
-          decoration: BoxDecoration(
+      bottomNavigationBar: StreamBuilder(
+            stream: FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items").snapshots(),
+            builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> streamSnapshot){
+              if(streamSnapshot.hasData){
+                double total=0;
+                double price,quantity;
+                for (var i = 0; i < streamSnapshot.data!.docs.length; i++){
+                  DocumentSnapshot _doc=streamSnapshot.data!.docs[i];
+                  price=double.parse(_doc['price']);
+                  quantity=double.parse(_doc['quantity']);
+                  total=total+price*quantity;
+                  print(total);
+                  
+                }
+    
+                return InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Billing(total: total.toString(),)));
+                  },
+                  child: Container(
+                     margin: EdgeInsets.all(8),
+                   height: 55,
+                     width: MediaQuery.of(context).size.width,
+                     decoration: BoxDecoration(
             color: Color(0xffccff01),
             borderRadius: BorderRadius.all(Radius.circular(15))
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.shopping_cart_checkout),
-              SizedBox(width: 2,),
-              Text("proceed",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
-            ],
-          ),
-        ),
-      ),
+                    child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.shopping_cart_checkout),
+                                SizedBox(width: 2,),
+                                Text("Total ₹"+total.toString(),style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                              ],
+                            ),
+                  ),
+                );
+              }
+              return CircularProgressIndicator();
+            } , 
+            ),   
+      
     );
   }
 }

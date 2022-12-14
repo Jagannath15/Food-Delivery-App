@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/Authentication/phone.dart';
 import 'package:food_delivery_app/Authentication/verify_otp.dart';
 import 'package:food_delivery_app/Screens/home.dart';
+import 'package:food_delivery_app/Screens/order_successfull.dart';
 import 'package:food_delivery_app/Screens/payment.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,6 +51,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       
      home:login==false? Home(): StartPage(),
+    
     );
   }
 }

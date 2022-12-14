@@ -28,7 +28,6 @@ class DetailPage extends StatelessWidget {
        "img":documentSnapshot['imageUrl']
 
     });
-  print("added");
   }
 
 

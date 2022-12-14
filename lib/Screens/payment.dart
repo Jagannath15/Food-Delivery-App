@@ -1,3 +1,4 @@
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,22 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:food_delivery_app/Screens/cart.dart';
+import 'package:food_delivery_app/Screens/order_successfull.dart';
 import 'package:get/get.dart';
 import '../Controllers/billing_page_controller.dart';
 import '../Controllers/payement_type_controller.dart';
 
 class Billing extends StatelessWidget {
   final total;
-  
+
   Billing({Key? key, required this.total}) : super(key: key);
 
   final Billingcontroller b = Get.put(Billingcontroller());
-  final payemnt_type pt=Get.put(payemnt_type());
+  final payemnt_type pt = Get.put(payemnt_type());
   @override
   Widget build(BuildContext context) {
-   
-    
-
     TextEditingController fname = TextEditingController();
     TextEditingController lname = TextEditingController();
     TextEditingController addrs = TextEditingController();
@@ -28,6 +27,12 @@ class Billing extends StatelessWidget {
     TextEditingController city = TextEditingController();
     TextEditingController pincode = TextEditingController();
 
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    String getRandomString(int length) =>
+        String.fromCharCodes(Iterable.generate(
+            length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
     List<Step> steps() {
       return [
@@ -69,7 +74,6 @@ class Billing extends StatelessWidget {
                 ? StepState.complete
                 : StepState.indexed),
         Step(
-            
             title: Text("Address"),
             content: Column(
               children: [
@@ -148,97 +152,93 @@ class Billing extends StatelessWidget {
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Amount to be paid ₹"+total),
-                 Row(
+              Text("Amount to be paid ₹" + total),
+              Row(
                 children: [
                   Obx(
-                    ()=>Radio(
-                        value: "Cash on delivery",
-                        groupValue: pt.payemnttype.value,
-                        onChanged: (value) {pt.onchange(value);},
-                        activeColor: Colors.black,
-                        fillColor: MaterialStateProperty.all(Colors.black),
-                        ),
+                    () => Radio(
+                      value: "Cash on delivery",
+                      groupValue: pt.payemnttype.value,
+                      onChanged: (value) {
+                        pt.onchange(value);
+                      },
+                      activeColor: Colors.black,
+                      fillColor: MaterialStateProperty.all(Colors.black),
+                    ),
                   ),
                   Text("Cash on Delivery"),
                   Flexible(fit: FlexFit.tight, child: SizedBox()),
                   Container(
-                    height: 35,
-                    width: 35,
-                    color: Colors.transparent,
-                    child: Image.asset("assets/cash.png")
-                    
-                  )
+                      height: 35,
+                      width: 35,
+                      color: Colors.transparent,
+                      child: Image.asset("assets/cash.png"))
                 ],
               ),
-
-               Row(
+              Row(
                 children: [
                   Obx(
-                    ()=> Radio(
-                        value: "Google Pay",
-                        groupValue:pt.payemnttype.value,
-                        onChanged: (value) {pt.onchange(value);},
-                        activeColor: Colors.black,
-                        fillColor: MaterialStateProperty.all(Colors.black),
-                        ),
+                    () => Radio(
+                      value: "Google Pay",
+                      groupValue: pt.payemnttype.value,
+                      onChanged: (value) {
+                        pt.onchange(value);
+                      },
+                      activeColor: Colors.black,
+                      fillColor: MaterialStateProperty.all(Colors.black),
+                    ),
                   ),
                   Text("Google Pay"),
                   Flexible(fit: FlexFit.tight, child: SizedBox()),
                   Container(
-                    height: 35,
-                    width: 35,
-                    color: Colors.transparent,
-                    child: Image.asset("assets/google-pay-logo.png")
-                    
-                  )
+                      height: 35,
+                      width: 35,
+                      color: Colors.transparent,
+                      child: Image.asset("assets/google-pay-logo.png"))
                 ],
               ),
-
-               Row(
+              Row(
                 children: [
                   Obx(
-                    ()=> Radio(
-                        value: "Phone Pe/ Patym",
-                        groupValue: pt.payemnttype.value,
-                        onChanged: (value) {pt.onchange(value);},
-                        activeColor: Colors.black,
-                        fillColor: MaterialStateProperty.all(Colors.black),
-                        ),
+                    () => Radio(
+                      value: "Phone Pe/ Patym",
+                      groupValue: pt.payemnttype.value,
+                      onChanged: (value) {
+                        pt.onchange(value);
+                      },
+                      activeColor: Colors.black,
+                      fillColor: MaterialStateProperty.all(Colors.black),
+                    ),
                   ),
                   Text("PhonePe/Patym"),
                   Flexible(fit: FlexFit.tight, child: SizedBox()),
                   Container(
-                    height: 35,
-                    width: 35,
-                    color: Colors.transparent,
-                    child: Image.asset("assets/PhonePe_Logo.png")
-                    
-                  )
+                      height: 35,
+                      width: 35,
+                      color: Colors.transparent,
+                      child: Image.asset("assets/PhonePe_Logo.png"))
                 ],
               ),
-
-
-               Row(
+              Row(
                 children: [
-                  Obx(()=>
-                      Radio(
-                        value: "Credit / Debit card",
-                        groupValue: pt.payemnttype.value,
-                        onChanged: (value) {pt.onchange(value);},
-                        activeColor: Colors.black,
-                        fillColor: MaterialStateProperty.all(Colors.black),
-                        ),
+                  Obx(
+                    () => Radio(
+                      value: "Credit / Debit card",
+                      groupValue: pt.payemnttype.value,
+                      onChanged: (value) {
+                        pt.onchange(value);
+                      },
+                      activeColor: Colors.black,
+                      fillColor: MaterialStateProperty.all(Colors.black),
+                    ),
                   ),
                   Text("Credit/Debit card"),
                   Flexible(fit: FlexFit.tight, child: SizedBox()),
                   Container(
-                    height: 35,
-                    width: 45,
-                    color: Colors.transparent,
-                    child: Image.asset("assets/visa.jpg")
-                    
-                  )
+                      height: 35,
+                      width: 45,
+                      color: Colors.transparent,
+                      child: Image.asset("assets/visa.jpg"))
                 ],
               )
             ],
@@ -249,22 +249,70 @@ class Billing extends StatelessWidget {
     }
 
 
+      
 
 
     return Scaffold(
-     
       appBar: AppBar(
-        title: Text("Confirm Order",style: TextStyle(color: Colors.black),),
+        title: Text(
+          "Confirm Order",
+          style: TextStyle(color: Colors.black),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(onPressed: (){()=>Get.to(CartPage());}, icon: Icon(Icons.arrow_back,color: Colors.black,)),
+        leading: IconButton(
+            onPressed: () {
+              () => Get.to(CartPage());
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            )),
       ),
       body: Theme(
         data: ThemeData(
           colorScheme: Theme.of(context).colorScheme.copyWith(
                 primary: Colors.black,
-              ), ),
-        child: SingleChildScrollView(
+              ),
+        ),
+        child: StreamBuilder(
+          stream:  FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items").snapshots(),
+          builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> streamSnapshot){
+            if(streamSnapshot.hasData){
+                var order_name="";
+                for (var i = 0; i < streamSnapshot.data!.docs.length; i++) {
+                  DocumentSnapshot _doc=streamSnapshot.data!.docs[i];
+                  order_name=order_name+_doc['name']+" x"+_doc['quantity']+" ";
+                }
+                print(order_name);
+                var order_id=getRandomString(8);
+
+              placeorder() async{
+                String datetime = DateTime.now().toString();
+
+                FirebaseAuth _auth=FirebaseAuth.instance;
+    var currentuser=_auth.currentUser;
+        CollectionReference order_db=FirebaseFirestore.instance.collection("Orders");
+         return order_db.doc(currentuser!.phoneNumber).collection("items").doc(order_id+datetime.trim()).set({
+          "Order ID":order_id.toString(),
+          "First Name":fname.text,
+          "Last Name": lname.text,
+          "Contact No": currentuser.phoneNumber,
+          "Items Orders":order_name,
+          "Address":addrs.text,
+          "City":city.text,
+          "total":total.toString(),
+          "Status":"In Process",
+          "Transation Time":datetime.toString(),
+          "Payment Type":pt.payemnttype.toString()          
+         });
+      }
+
+
+
+
+
+              return  SingleChildScrollView(
             child: Obx(() => Stepper(
                 
                 type: StepperType.vertical,
@@ -273,6 +321,8 @@ class Billing extends StatelessWidget {
                 steps: steps(),
                 onStepContinue: () {
                   if (b.currentStep.value == 2) {
+                   placeorder();
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Order_Succesfull(id: order_id.toString())));
                     Get.snackbar("Succes", "suceess");
                   } else {
                     b.currentStep.value++;
@@ -311,7 +361,12 @@ class Billing extends StatelessWidget {
                       ],
                     ),
                   );
-                }))),
+                })));
+            
+            }
+            return CircularProgressIndicator();
+          }
+        ),
       ),
     );
   }

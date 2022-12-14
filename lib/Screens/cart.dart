@@ -48,7 +48,7 @@ var mainpay=0;
                 return Container(
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    color: Color(0xffd7d8da),
+                    color: Color(0xffe5e4e2),
                     borderRadius: BorderRadius.all(Radius.circular(15)), 
                                       ),
                   margin: EdgeInsets.only(top: 10,left: 10,right: 10),
@@ -72,10 +72,10 @@ var mainpay=0;
                         ],
                       ),
                       SizedBox(width: 10,),
-                      Text("₹"+total,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.green), ),
+                      Text("₹"+total,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black), ),
                       IconButton(onPressed: (){ 
                         FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items").doc(_doc['name']).delete();
-                      }, icon: Icon(Icons.remove_shopping_cart),splashColor: Colors.amber,),
+                      }, icon: Icon(Icons.remove_shopping_cart),),
 
                     ],
                   )
@@ -84,8 +84,10 @@ var mainpay=0;
             
             );
           }
-          return CircularProgressIndicator(
-            color: Colors.black54,
+          return Center(
+            child: CircularProgressIndicator(
+              color: Colors.black26,
+            ),
           );
         }
         ),
@@ -128,7 +130,27 @@ var mainpay=0;
                   ),
                 );
               }
-              return CircularProgressIndicator();
+              return Container(
+            margin: EdgeInsets.all(8),
+            height: 55,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: Color(0xffccff01),
+                borderRadius: BorderRadius.all(Radius.circular(15))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.shopping_cart_checkout),
+                SizedBox(
+                  width: 2,
+                ),
+                Text(
+                  "Total ₹ 0",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ],
+                            ),
+                  );
             } , 
             ),   
       

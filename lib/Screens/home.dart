@@ -255,7 +255,7 @@ class _HomepageState extends State<Homepage> {
                   },
                   );
                 }
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(color: Colors.black12,));
             }),
           ),
 
@@ -328,7 +328,7 @@ class _HomepageState extends State<Homepage> {
                   },
                   );
                 }
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator(color: Colors.black12,));
             }),
           ),
             ],

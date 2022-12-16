@@ -30,7 +30,8 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Settings",style: TextStyle(color: Colors.black),),backgroundColor: Colors.white,elevation: 0,foregroundColor: Colors.black,),
+      backgroundColor:  Color(0xffEAEFF2),
+      appBar: AppBar(title: Text("Settings",style: TextStyle(color: Colors.black),),backgroundColor:  Color(0xffEAEFF2),elevation: 0,foregroundColor: Colors.black,),
       body: Column(
         children: [
           InkWell(
@@ -43,7 +44,7 @@ class _SettingPageState extends State<SettingPage> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Color(0xffe5e4e2)
+                color: Colors.white
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +67,7 @@ class _SettingPageState extends State<SettingPage> {
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xffe5e4e2)
+                  color: Colors.white
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

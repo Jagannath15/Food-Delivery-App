@@ -14,11 +14,12 @@ import '../Controllers/payement_type_controller.dart';
 class Billing extends StatelessWidget {
   final total;
 
-  Billing({Key? key, required this.total}) : super(key: key);
+  Billing({Key? key, this.total}) : super(key: key);
 
   final Billingcontroller b = Get.put(Billingcontroller());
   final payemnt_type pt = Get.put(payemnt_type());
   @override
+
   Widget build(BuildContext context) {
     TextEditingController fname = TextEditingController();
     TextEditingController lname = TextEditingController();
@@ -324,6 +325,8 @@ class Billing extends StatelessWidget {
                    placeorder();
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Order_Succesfull(id: order_id.toString())));
                     Get.snackbar("Succes", "suceess");
+                //    Navigator.pop(context,MaterialPageRoute(builder: (context)=>Billing()));
+                   FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).delete();
                   } else {
                     b.currentStep.value++;
                   }

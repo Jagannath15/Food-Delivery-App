@@ -18,13 +18,14 @@ var mainpay=0;
   Widget build(BuildContext context) {
     
     return Scaffold(
+      backgroundColor:  Color(0xffEAEFF2),
       appBar: AppBar(
         leading: IconButton(onPressed: (){
           Get.to(Home());
         }, icon: Icon(Icons.arrow_back_rounded,size: 30,color: Colors.black54,)),
         elevation: 0,
         title: Text("Checkout",style: TextStyle(color: Colors.black),),
-        backgroundColor: Colors.white,
+        backgroundColor:  Color(0xffEAEFF2),
       ),
       body: SingleChildScrollView(
         child: StreamBuilder(
@@ -48,7 +49,7 @@ var mainpay=0;
                 return Container(
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    color: Color(0xffe5e4e2),
+                    color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(15)), 
                                       ),
                   margin: EdgeInsets.only(top: 10,left: 10,right: 10),
@@ -67,7 +68,10 @@ var mainpay=0;
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(_doc['name'],style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Text(_doc['name'],style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),))),
                           Text("Quantity: "+_doc['quantity'],style: TextStyle(fontSize: 15,fontWeight: FontWeight.w300,)), 
                         ],
                       ),

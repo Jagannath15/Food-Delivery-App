@@ -25,26 +25,36 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String ?mobno;
   int currentindex=0;
-
-  final Screens=[
-    Homepage(),
-    CartPage(),
-    SettingPage()
-  ];
+  PageController _pg=PageController(initialPage: 0);
 
   Widget build(BuildContext context) {
     return Scaffold(
     backgroundColor: Color(0xfff6f5f8),
   
-      body: Screens[currentindex],
+      body: PageView(
+        controller: _pg,
+        onPageChanged: (index) {
+          setState(() {
+            currentindex=index;
+          });
+        },
+        
+        children: [
+           Homepage(),
+           CartPage(),
+          SettingPage()
+          ], 
+
+          ),
       
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Color(0xfff6f5f8),
+        backgroundColor:  Color(0xffEAEFF2),
         color: Color(0xff1f1f1f),
-        height: 48,
+        height: 48,      
         index: currentindex,
         onTap: (index)=>setState(() {
-          currentindex=index;
+          //currentindex=index;
+          _pg.animateToPage(index, duration: Duration(microseconds: 500), curve: Curves.elasticOut);
         }),
         items: [
           Icon(Icons.home,color: Colors.white,),
@@ -77,8 +87,9 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      backgroundColor: Color(0xffEAEFF2),
       body: SafeArea(
+        
            child: SingleChildScrollView(child: Column(
             children: [
              Container(
@@ -210,7 +221,7 @@ class _HomepageState extends State<Homepage> {
             ),
                   
           Container(
-            height: 200,
+            height: 210,
             
             child: StreamBuilder(
               stream: _products.snapshots(),
@@ -228,9 +239,13 @@ class _HomepageState extends State<Homepage> {
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(documentSnapshot: documentSnapshot)));
                     },
                     child: Container(
-                      height: 190,
-                      width: 160,
+                      height: 200,
+                      width: 170,
                       margin: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white
+                      ),
                       child: Column(
                         children: [
                           Container(
@@ -239,14 +254,21 @@ class _HomepageState extends State<Homepage> {
                               color: Colors.transparent,
                               child: Image.network(documentSnapshot['imageUrl']),
                             ),
-                            SizedBox(height: 10,),
-                            Row(
-                              children: [
-                                Text(documentSnapshot['name']),
-                                Flexible(fit: FlexFit.tight, child: SizedBox()),
-                                Text(documentSnapshot['Price'])
+                            
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10,left: 6,right: 6,bottom: 1),
+                              child: Row(
+                                children: [
+                                  Expanded(child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Text(documentSnapshot['name'],style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
+                                    overflow: TextOverflow.ellipsis,maxLines: 1,),
+                                  )),
+                                  Flexible(fit: FlexFit.tight, child: SizedBox()),
+                                  Text("₹"+documentSnapshot['Price'],style: TextStyle(fontWeight: FontWeight.bold))
                         ],
                       ),
+                            ),
                         ]
                     ),
                     ),
@@ -281,7 +303,7 @@ class _HomepageState extends State<Homepage> {
 
 
           Container(
-            height: 200,
+            height: 210,
             
             child: StreamBuilder(
               stream: _specials.snapshots(),
@@ -299,9 +321,13 @@ class _HomepageState extends State<Homepage> {
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(documentSnapshot: documentSnapshot)));
                     },
                     child: Container(
-                      height: 190,
-                      width: 160,
+                      height: 200,
+                      width: 170,
                       margin: EdgeInsets.all(10),
+                     decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white
+                      ),
                       child: Column(
                         children: [
                           Container(
@@ -310,15 +336,23 @@ class _HomepageState extends State<Homepage> {
                               color: Colors.transparent,
                               child: Image.network(documentSnapshot['imageUrl']),
                             ),
-                            SizedBox(height: 10,),
+               
                             Wrap(
-                              children:[Row(
-                                children: [
-                                  Text(documentSnapshot['name'],textDirection: TextDirection.ltr),
-                                  Flexible(fit: FlexFit.tight, child: SizedBox()),
-                                  Text(documentSnapshot['Price'])
-                                                    ],
-                                                  ),]
+                              children:[Padding(
+                               padding: const EdgeInsets.only(top: 10,left: 6,right: 6,bottom: 1),
+                                child: Row(
+                                  children: [
+                                    Expanded(child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        documentSnapshot['name'],style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
+                                        maxLines: 1,
+                                        ))),
+                                    Flexible(fit: FlexFit.tight, child: SizedBox()),
+                                    Text("₹"+documentSnapshot['Price'],style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16))
+                                                      ],
+                                                    ),
+                              ),]
                             ),
                         ]
                     ),

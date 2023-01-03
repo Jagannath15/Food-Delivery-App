@@ -59,11 +59,10 @@ class _OtpVerifyState extends State<OtpVerify> {
                 await auth.signInWithCredential(credential);  
                 SharedPreferences prefs=await SharedPreferences.getInstance();
                 prefs.setBool("finalLogin", false);
-              //  Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
-                Get.to(Home());
-              
+
+             Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>Home()), (route) => false);        
             
-                Get.snackbar("Welcome to Food App", "We have successfully verified you.");
+             
               }catch(e){
                 Get.snackbar("Error","Please re-enter your OTP ");
               }

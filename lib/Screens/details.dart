@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:food_delivery_app/Screens/home.dart';
 import 'package:get/get.dart';
 
+import '../Controllers/addtocartbutton.dart';
 import '../Controllers/detail_page_controller.dart';
 
 
@@ -16,6 +17,8 @@ class DetailPage extends StatelessWidget {
    DetailPage({Key? key,
    required this.documentSnapshot}) : super(key: key);
  final DetailController c=Get.put(DetailController());
+ final Cartbuttonchange cartbutton=Get.put(Cartbuttonchange());
+
   @override
 
   addtocart() async{
@@ -137,6 +140,7 @@ class DetailPage extends StatelessWidget {
                       Flexible(fit: FlexFit.tight, child: SizedBox()),
                       InkWell(
                         onTap: (){
+                          cartbutton.isaddedcart.value=true;
                           addtocart();
                         },
                         child: Container(
@@ -152,7 +156,7 @@ class DetailPage extends StatelessWidget {
                               children: [
                                   Icon(Icons.shopping_cart,size: 30,),
                                   SizedBox(width: 10,),
-                                  Text("Add to cart",style: TextStyle(fontSize: 18),)
+                                  Obx(()=>  cartbutton.isaddedcart.value==false? Text("Add to cart",style: TextStyle(fontSize: 18)):Text("Added to cart",style: TextStyle(fontSize: 18)) )
                               ],
                             ),
                          

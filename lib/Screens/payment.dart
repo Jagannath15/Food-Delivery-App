@@ -35,6 +35,9 @@ class Billing extends StatelessWidget {
         String.fromCharCodes(Iterable.generate(
             length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
+
+
+
     List<Step> steps() {
       return [
         Step(
@@ -112,6 +115,7 @@ class Billing extends StatelessWidget {
                 ),
                 TextField(
                   controller: pincode,
+
                   decoration: InputDecoration(
                     hintText: "Enter Pin-Code",
                     filled: true,
@@ -322,11 +326,22 @@ class Billing extends StatelessWidget {
                 steps: steps(),
                 onStepContinue: () {
                   if (b.currentStep.value == 2) {
-                   placeorder();
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Order_Succesfull(id: order_id.toString())));
+                  
+                      if( fname=="" || lname=='' || addrs=='' || lnd=='' || city=='' || pincode=='' || pt.payemnttype.isEmpty){
+                        Get.snackbar("Enter required details", "Please recheck all the required details");
+                      }
+                  
+                  else{
+                    placeorder();
+                   
+                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Order_Succesfull(id: order_id.toString())),
+                   (route) => false);    
+                   // Navigator.push(context, MaterialPageRoute(builder: (context)=>Order_Succesfull(id: order_id.toString())));
                     Get.snackbar("Succes", "suceess");
-                //    Navigator.pop(context,MaterialPageRoute(builder: (context)=>Billing()));
+                   // Navigator.pop(context,MaterialPageRoute(builder: (context)=>Billing()));
                    FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).delete();
+
+                    }
                   } else {
                     b.currentStep.value++;
                   }

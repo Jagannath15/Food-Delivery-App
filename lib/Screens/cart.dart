@@ -69,14 +69,22 @@ var mainpay=0;
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Expanded(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Text(_doc['name'],style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),))),
-                          Text("Quantity: "+_doc['quantity'],style: TextStyle(fontSize: 15,fontWeight: FontWeight.w300,)), 
+              
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(_doc['name'],style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),overflow: TextOverflow.ellipsis,))),
+                          Row(
+                            
+                            children: [
+                              Text("Quantity: "+_doc['quantity'],style: TextStyle(fontSize: 15,fontWeight: FontWeight.w300,)),
+                              SizedBox(width: 10,),
+                              Text("₹"+total,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black), ),
+                            ],
+                          ), 
                         ],
                       ),
                       SizedBox(width: 10,),
-                      Text("₹"+total,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black), ),
+                      
                       IconButton(onPressed: (){ 
                         FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items").doc(_doc['name']).delete();
                       }, icon: Icon(Icons.remove_shopping_cart),),

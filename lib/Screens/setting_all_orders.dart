@@ -19,10 +19,10 @@ class AllOrders extends StatelessWidget {
           builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> streamSnapshot){
             if (streamSnapshot.hasData) {
               return ListView.builder(
-                scrollDirection: Axis.vertical,
-                   shrinkWrap: true,
-                      itemCount: streamSnapshot.data!.docs.length,
-                itemBuilder: (context, index) {
+                 scrollDirection: Axis.vertical,
+                 shrinkWrap: true,
+                 itemCount: streamSnapshot.data!.docs.length,
+                 itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =streamSnapshot.data!.docs[index];
                 return Container(
                   margin: EdgeInsets.all(5),

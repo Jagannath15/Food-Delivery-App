@@ -14,6 +14,7 @@ class AllOrders extends StatelessWidget {
         foregroundColor: Colors.black,
         title: Text("All Orders",style: TextStyle(color: Colors.black),),backgroundColor: Colors.white,elevation: 0,),
       body:SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: StreamBuilder(
           stream:FirebaseFirestore.instance.collection("Orders").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items").snapshots() ,
           builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> streamSnapshot){

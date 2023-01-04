@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:food_delivery_app/Screens/cart.dart';
+import 'package:food_delivery_app/Screens/search.dart';
 import 'package:food_delivery_app/Screens/setting.dart';
 import 'package:food_delivery_app/Widgets/recommended_items.dart';
 import 'package:food_delivery_app/Widgets/topcategories.dart';
@@ -41,6 +42,7 @@ class _HomeState extends State<Home> {
         
         children: [
            Homepage(),
+           SearchPage(),
            CartPage(),
           SettingPage()
           ], 
@@ -48,7 +50,7 @@ class _HomeState extends State<Home> {
           ),
       
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor:  Color(0xffEAEFF2),
+        backgroundColor:  Colors.transparent,
         color: Color(0xff1f1f1f),
         height: 48,      
         index: currentindex,
@@ -58,6 +60,7 @@ class _HomeState extends State<Home> {
         }),
         items: [
           Icon(Icons.home,color: Colors.white,),
+          Icon(Icons.search,color: Colors.white,),
           Icon(Icons.shopping_cart_checkout,color: Colors.white),
           Icon(Icons.settings,color: Colors.white),
         ]
@@ -83,7 +86,7 @@ class _HomepageState extends State<Homepage> {
 
     
 
-      final CollectionReference _noofitems=FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items");
+  final CollectionReference _noofitems=FirebaseFirestore.instance.collection("add_to_cart").doc(FirebaseAuth.instance.currentUser!.phoneNumber).collection("items");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +96,7 @@ class _HomepageState extends State<Homepage> {
            child: SingleChildScrollView(child: Column(
             children: [
              Container(
-              height: 140,
+              padding: EdgeInsets.only(bottom: 10,left: 8,right: 8),
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Color(0xff1f1f1f),
@@ -106,7 +109,8 @@ class _HomepageState extends State<Homepage> {
                     children: [
                       Container(
                         margin: EdgeInsets.all(10),
-                        child: Text("Eat and Greet",style: TextStyle(color: Colors.white,fontSize: 25, fontWeight: FontWeight.bold))),   
+                        child: Text("Eat and Greet",style: TextStyle(color: Colors.white,fontSize: 25, fontWeight: FontWeight.bold))
+                        ),   
                         Flexible(fit: FlexFit.tight, child: SizedBox()),
                       InkWell(
                         onTap: () => Get.to(CartPage()),
@@ -144,27 +148,7 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ),
                     ],
-                  ), 
-              Container(
-                margin: EdgeInsets.only(left: 10,right: 10,top: 4,bottom: 5),
-                          child: TextField(
-                            cursorColor: Color(0xff969696),
-                            style: TextStyle(color: Color(0xff969696)),
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.search,size: 30,color: Color(0xff969696),),
-                              filled: true,
-                              fillColor: Color(0xff393939),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20)
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20)
-                              ),
-                              hintText: "Search Something for Tasty...",
-                              hintStyle: TextStyle(color: Color(0xff969696)),
-                               )         
-                    ),
-                        ),             
+                  ),           
                 ],
               ),
              ),
@@ -186,6 +170,10 @@ class _HomepageState extends State<Homepage> {
             ),
           SizedBox(height: 10,),
            Container(
+
+            decoration: BoxDecoration(
+              
+            ),
            height: 45,
           margin: EdgeInsets.all(5),
              child: ListView(
@@ -197,8 +185,8 @@ class _HomepageState extends State<Homepage> {
               Topcategories("Sandwich","assets/icons/sandwich.png"),
               Topcategories("Chicken","assets/icons/chicken.png"),
               Topcategories("Wrap","assets/icons/wrap.png"),
-              Topcategories("Veg Salad","assets/icons/vegsalad.png"),
-              Topcategories("Desert","assets/icons/desert.png"),             
+      
+          
               ],
              ),
            ),
@@ -212,7 +200,8 @@ class _HomepageState extends State<Homepage> {
                   InkWell(
                     child: Row(
                       children: [
-                        Text("View all",style: TextStyle(fontSize: 13,color: Color(0xff969696)),),
+                        Text("View all",style: TextStyle(
+                          fontSize: 13,color: Color(0xff969696)),),
                         Icon(Icons.arrow_forward,size: 18,color: Color(0xff969696),)
                       ],
                     )                  )
@@ -244,7 +233,11 @@ class _HomepageState extends State<Homepage> {
                       margin: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.white
+                        color: Colors.white,
+                        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                         offset: Offset(0, 3),)]
                       ),
                       child: Column(
                         children: [
@@ -326,7 +319,11 @@ class _HomepageState extends State<Homepage> {
                       margin: EdgeInsets.all(10),
                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.white
+                        color: Colors.white,
+                        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                         offset: Offset(0, 3),)]
                       ),
                       child: Column(
                         children: [

@@ -15,7 +15,8 @@ Widget Topcategories(
                   width: 120,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)
+                    borderRadius: BorderRadius.circular(10),
+                
                   ),
                   child: Row(children: [
                     CircleAvatar(foregroundImage: AssetImage(image),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -25,7 +27,7 @@ List searchlist=[];
 
     late  QuerySnapshot result;
     void searchproduct(String text) async{
-       result = await FirebaseFirestore.instance.collection("all_items").where('name', isEqualTo: text).get();
+       result = await FirebaseFirestore.instance.collection("all_items").where('name', isEqualTo: text ).get();
     //  print(d.searchlist);
       setState(() {
          searchlist=result.docs.map((e) => e.data()).toList();

@@ -7,7 +7,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:food_delivery_app/Screens/home.dart';
 import 'package:get/get.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import '../Controllers/addtocartbutton.dart';
 import '../Controllers/detail_page_controller.dart';
 
@@ -18,13 +18,12 @@ class DetailPage extends StatelessWidget {
    required this.documentSnapshot}) : super(key: key);
  final DetailController c=Get.put(DetailController());
  final Cartbuttonchange cartbutton=Get.put(Cartbuttonchange());
-
+CollectionReference collectionReference=FirebaseFirestore.instance.collection("add_to_cart");
   @override
 
   addtocart() async{
     FirebaseAuth _auth=FirebaseAuth.instance;
     var curremtuser=_auth.currentUser;
-    CollectionReference collectionReference=FirebaseFirestore.instance.collection("add_to_cart");
      return collectionReference.doc(curremtuser!.phoneNumber).collection("items").doc(documentSnapshot['name']).set({
       "name":documentSnapshot['name'],
       "price":documentSnapshot['Price'],
@@ -32,7 +31,7 @@ class DetailPage extends StatelessWidget {
        "img":documentSnapshot['imageUrl']
 
     });
-  }
+  } 
 
 
   Widget build(BuildContext context) {
@@ -42,9 +41,12 @@ class DetailPage extends StatelessWidget {
           children: [
             Stack(
               children: [    
-                Container(
-                  height: 320,
-                  child: Image(image: NetworkImage(documentSnapshot['imageUrl']),),
+                Hero(
+                  tag: documentSnapshot['imageUrl'].toString(),
+                  child: Container(
+                    height: 320,
+                    child: Image(image: NetworkImage(documentSnapshot['imageUrl']),),
+                  ),
                 ),
                 InkWell(
                   onTap: () => Get.to(Home()),
@@ -52,7 +54,7 @@ class DetailPage extends StatelessWidget {
                     margin: EdgeInsets.only(top: 4,left: 8),
                     width: 23,
                     height: 23,
-                    child: Icon(Icons.arrow_back_ios,size: 26,)
+                    child: Icon(Icons.arrow_back,size: 26,)
                   ),
                 ),
               ],
@@ -138,30 +140,41 @@ class DetailPage extends StatelessWidget {
                      ),
                      // Text(documentSnapshot['Price'],style: TextStyle(color: Colors.white,fontSize: 23,fontWeight: FontWeight.w500),),
                       Flexible(fit: FlexFit.tight, child: SizedBox()),
-                      InkWell(
-                        onTap: (){
-                          cartbutton.isaddedcart.value=true;
-                          addtocart();
-                        },
-                        child: Container(
-                          height: 55,
-                          width: 190,
-                          decoration: BoxDecoration(
-                            color: Color(0xffccff01),
-                            borderRadius: BorderRadius.circular(15)
-                          ),
-                         
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                  Icon(Icons.shopping_cart,size: 30,),
-                                  SizedBox(width: 10,),
-                                  Obx(()=>  cartbutton.isaddedcart.value==false? Text("Add to cart",style: TextStyle(fontSize: 18)):Text("Added to cart",style: TextStyle(fontSize: 18)) )
-                              ],
+                      
+                    InkWell(
+                      onTap: (){
+                        if(c.quantity.value>0){addtocart();
+                         Get.delete();
+                         Fluttertoast.showToast(
+                          msg: "Item added to cart succesfully",
+                          backgroundColor: Colors.green,
+                          textColor: Colors.white,
+                          fontSize: 16,
+                          );
+                          }
+                          else{
+                            Fluttertoast.showToast(msg: "Enter valid quantity",backgroundColor: Colors.red,textColor: Colors.white);
+                          }
+                  
+                      },
+                      child: Container(
+                        height: 55,
+                        width: 190,
+                         decoration: BoxDecoration(
+                              color: Color(0xffccff01),
+                              borderRadius: BorderRadius.circular(15)
                             ),
-                         
-                        ),
-                      )
+                           
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                    Icon(Icons.shopping_cart,size: 30,),
+                                    SizedBox(width: 10,),
+                                      Text("Add to cart",style: TextStyle(fontSize: 18)),
+                                ],
+                              ),
+                      ),
+                    ),
                     ],
                   )
 

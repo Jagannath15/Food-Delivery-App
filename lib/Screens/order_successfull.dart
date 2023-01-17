@@ -3,6 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:food_delivery_app/Screens/home.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 class Order_Succesfull extends StatelessWidget {
   final id;
@@ -16,7 +17,7 @@ class Order_Succesfull extends StatelessWidget {
         child: Column(   
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(image: AssetImage("assets/icons8-ok.gif")),
+            Lottie.asset("assets/100518-success-anime.json"),
             SizedBox(height: 10,),
             Text("Your Order has been successfully placed",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
             SizedBox(height: 5,),

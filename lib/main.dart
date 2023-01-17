@@ -1,16 +1,22 @@
 
+import 'dart:math';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:food_delivery_app/Authentication/phone.dart';
 import 'package:food_delivery_app/Authentication/verify_otp.dart';
 import 'package:food_delivery_app/Screens/home.dart';
 import 'package:food_delivery_app/Screens/order_successfull.dart';
 import 'package:food_delivery_app/Screens/payment.dart';
+import 'package:food_delivery_app/Screens/search.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp();
   runApp(const MyApp()
   //MaterialApp(home: MyApp())
@@ -31,6 +37,9 @@ class _MyAppState extends State<MyApp> {
   bool ?login;
   @override
   void initState() {
+      Future.delayed(Duration(seconds: 2)).then((value) => {
+      FlutterNativeSplash.remove()
+    });
     // TODO: implement initState  
     login=true;
     finalstate();
@@ -49,7 +58,7 @@ class _MyAppState extends State<MyApp> {
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      
+     
      home:login==false? Home(): StartPage(),
     
     );
@@ -119,3 +128,6 @@ class _StartPageState extends State<StartPage> {
     );
   }
 }
+
+
+

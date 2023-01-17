@@ -14,6 +14,7 @@ import 'package:food_delivery_app/Widgets/recommended_items.dart';
 import 'package:food_delivery_app/Widgets/topcategories.dart';
 import 'package:food_delivery_app/main.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
@@ -56,7 +57,7 @@ class _HomeState extends State<Home> {
         index: currentindex,
         onTap: (index)=>setState(() {
           //currentindex=index;
-          _pg.animateToPage(index, duration: Duration(microseconds: 500), curve: Curves.elasticOut);
+          _pg.animateToPage(index, duration: Duration(microseconds: 300), curve: Curves.elasticOut);
         }),
         items: [
           Icon(Icons.home,color: Colors.white,),
@@ -107,6 +108,10 @@ class _HomepageState extends State<Homepage> {
                   SizedBox(height: 10,),
                   Row(      
                     children: [
+                      Container(
+                        height: 40,
+                        child: Image.asset("assets/delivery-moto.png"),
+                      ),
                       Container(
                         margin: EdgeInsets.all(10),
                         child: Text("Eat and Greet",style: TextStyle(color: Colors.white,fontSize: 25, fontWeight: FontWeight.bold))
@@ -180,11 +185,14 @@ class _HomepageState extends State<Homepage> {
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,             
               children: [
-              Topcategories("Burger","assets/icons/burger.png"),
-              Topcategories("Pizza","assets/icons/pizza.png"),
-              Topcategories("Sandwich","assets/icons/sandwich.png"),
-              Topcategories("Chicken","assets/icons/chicken.png"),
-              Topcategories("Wrap","assets/icons/wrap.png"),
+          
+
+                 Topcategories("Burger","assets/icons/burger.png","burger"),
+               
+              Topcategories("Pizza","assets/icons/pizza.png","pizza"),
+           //   Topcategories("Sandwich","assets/icons/sandwich.png"),
+             // Topcategories("Chicken","assets/icons/chicken.png"),
+           //   Topcategories("Wrap","assets/icons/wrap.png"),
       
           
               ],
@@ -254,11 +262,11 @@ class _HomepageState extends State<Homepage> {
                                 children: [
                                   Expanded(child: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
-                                    child: Text(documentSnapshot['name'],style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
+                                    child: Text(documentSnapshot['name'],style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),
                                     overflow: TextOverflow.ellipsis,maxLines: 1,),
                                   )),
                                   Flexible(fit: FlexFit.tight, child: SizedBox()),
-                                  Text("₹"+documentSnapshot['Price'],style: TextStyle(fontWeight: FontWeight.bold))
+                                  Text("₹"+documentSnapshot['Price'],style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18))
                         ],
                       ),
                             ),
@@ -327,12 +335,15 @@ class _HomepageState extends State<Homepage> {
                       ),
                       child: Column(
                         children: [
-                          Container(
-                              height: 150,
-                              width: 170,
-                              color: Colors.transparent,
-                              child: Image.network(documentSnapshot['imageUrl']),
-                            ),
+                          Hero(
+                            tag: documentSnapshot['imageUrl'].toString(),
+                            child: Container(
+                                height: 150,
+                                width: 170,
+                                color: Colors.transparent,
+                                child: Image.network(documentSnapshot['imageUrl']),
+                              ),
+                          ),
                
                             Wrap(
                               children:[Padding(
@@ -360,9 +371,11 @@ class _HomepageState extends State<Homepage> {
                   );
                 }
               return Center(child: CircularProgressIndicator(color: Colors.black12,));
-            }),
+            }
           ),
-            ],
+        ),
+           
+      ],
                  ),
                  ),      
                
